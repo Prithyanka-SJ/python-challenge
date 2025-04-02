@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .streak, .challenge {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffeb3b;
+        }
+        .affirmation {
+            margin-top: 20px;
+            font-size: 16px;
+            font-style: italic;
+        }
+        .hidden {
+            display: none;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-top: 20px;
+            font-size: 14px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #6200ea;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .resources {
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+    </div>
+    
+    <div class="container hidden" id="challenge-container">
+        <h1>Welcome to Your Python Challenge</h1>
+        <p>Current Challenge:</p>
+        <div class="challenge" id="challenge"></div>
+        <textarea id="codeInput" placeholder="Write your Python code here..."></textarea>
+        <button onclick="checkSolution()">Submit Code</button>
+        <button onclick="restartChallenge()">Restart Challenge</button>
+        <p id="result"></p>
+        <button onclick="nextChallenge()">Next Challenge</button>
+        <div class="streak" id="streak">Current Streak: 0 days</div>
+        <div class="affirmation" id="affirmation"></div>
+        <div class="resources">
+            <h3>Resources</h3>
+            <ul id="resource-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        const challenges = [
+            { task: "Print 'Hello, World!' in Python", solution: "print('Hello, World!')", resources: ["https://docs.python.org/3/tutorial/introduction.html"] },
+            { task: "Write a Python program to swap two variables", solution: "a, b = b, a", resources: ["https://www.w3schools.com/python/python_variables.asp"] }
+        ];
+
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            
+            if (username === "admin" && password === "password") {
+                localStorage.setItem("loggedIn", true);
+                document.getElementById("login-container").classList.add("hidden");
+                document.getElementById("challenge-container").classList.remove("hidden");
+                loadProgress();
+            } else {
+                alert("Invalid credentials! Use 'admin' as username and 'password' as password for now.");
+            }
+        }
+
+        function loadProgress() {
+            let challengeIndex = localStorage.getItem("challengeIndex") || 0;
+            challengeIndex = parseInt(challengeIndex);
+            document.getElementById("challenge").innerText = challenges[challengeIndex].task;
+            loadResources(challengeIndex);
+            updateStreak();
+            showAffirmation();
+        }
+
+        function nextChallenge() {
+            let challengeIndex = localStorage.getItem("challengeIndex") || 0;
+            challengeIndex = Math.min(challenges.length - 1, parseInt(challengeIndex) + 1);
+            localStorage.setItem("challengeIndex", challengeIndex);
+            document.getElementById("challenge").innerText = challenges[challengeIndex].task;
+            loadResources(challengeIndex);
+        }
+
+        function checkSolution() {
+            let challengeIndex = localStorage.getItem("challengeIndex") || 0;
+            challengeIndex = parseInt(challengeIndex);
+            const userCode = document.getElementById("codeInput").value.trim();
+            const correctSolution = challenges[challengeIndex].solution;
+            
+            if (userCode === correctSolution) {
+                document.getElementById("result").innerText = "Correct! Move to the next challenge.";
+            } else {
+                document.getElementById("result").innerText = "Incorrect, try again!";
+            }
+        }
+
+        function restartChallenge() {
+            localStorage.setItem("challengeIndex", 0);
+            localStorage.setItem("streak", 0);
+            document.getElementById("challenge").innerText = challenges[0].task;
+            document.getElementById("streak").innerText = "Current Streak: 0 days";
+            document.getElementById("codeInput").value = "";
+            showAffirmation();
+        }
+
+        function showAffirmation() {
+            const affirmations = [
+                "You are making progress every day!",
+                "Believe in yourself and keep pushing forward!",
+                "Consistency is the key to mastery!",
+                "Every step you take brings you closer to success!",
+                "Small efforts add up to big achievements!",
+                "One step ahead is better than 10 steps behind."
+            ];
+            const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            document.getElementById("affirmation").innerText = randomAffirmation;
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem("loggedIn")) {
+                document.getElementById("login-container").classList.add("hidden");
+                document.getElementById("challenge-container").classList.remove("hidden");
+                loadProgress();
+            }
+        };
+    </script>
+</body>
+</html>
