@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Challenge</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        .streak {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffeb3b;
+        }
+        .affirmation {
+            margin-top: 20px;
+            font-size: 16px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Your Python Challenge</h1>
+        <p>Login to start your 30-day journey!</p>
+        <button onclick="login()">Login</button>
+        <div class="streak" id="streak">Current Streak: 0 days</div>
+        <div class="affirmation" id="affirmation">"Every step you take brings you closer to success!"</div>
+    </div>
+
+    <script>
+        function login() {
+            alert("Login system will be implemented soon!");
+        }
+
+        function updateStreak() {
+            let streak = localStorage.getItem("streak") || 0;
+            streak++;
+            localStorage.setItem("streak", streak);
+            document.getElementById("streak").innerText = "Current Streak: " + streak + " days";
+        }
+
+        function showAffirmation() {
+            const affirmations = [
+                "You are making progress every day!",
+                "Believe in yourself and keep pushing forward!",
+                "Consistency is the key to mastery!",
+                "Every step you take brings you closer to success!",
+                "Small efforts add up to big achievements!"
+            ];
+            const randomAffirmation = affirmations[Math.floor(Math.random() * affirmations.length)];
+            document.getElementById("affirmation").innerText = randomAffirmation;
+        }
+
+        window.onload = function() {
+            updateStreak();
+            showAffirmation();
+        };
+    </script>
+</body>
+</html>
